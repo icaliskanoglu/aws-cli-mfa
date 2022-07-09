@@ -31,6 +31,8 @@ func exportCredentials(credentials *sts.Credentials, profile string, credentials
 	if err != nil {
 		log.WithError(err).Panicf("Could not save credentials file!")
 	}
+
+	log.WithField("Profile", profile).Info("Temprory credentials are exported!")
 }
 
 func mustLoadFile(path string) *ini.File {

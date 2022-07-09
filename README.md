@@ -1,5 +1,7 @@
 # aws-cli-mfa
 
+aws-cli-mfa is an opensource, command line application that export temproray credentials to ~/.aws/credentials file. It is implemented with golang and supports multiple platform. You can export temproray credentials and interact aws resources easly.
+
 ## Prepare mfa settings
 
 ### ~/.aws/config
