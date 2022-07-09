@@ -83,7 +83,7 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Printf("Exporting credentials for '%s'", profile)
+	fmt.Printf("Exporting credentials for '%s' profile\n", profile)
 	usr, err := user.Current()
 	if err != nil {
 		log.WithError(err).Panicf("Could not get current User!")
@@ -101,5 +101,5 @@ func main() {
 
 	exportCredentials(tempCredentials, profile, credentialsFile, credentialsPath)
 
-	fmt.Printf("Temporary credentials are exported to '%s'!", credentialsPath)
+	fmt.Printf("Temporary credentials are exported to '%s'.\n", credentialsPath)
 }
