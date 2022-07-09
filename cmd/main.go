@@ -31,8 +31,6 @@ func exportCredentials(credentials *sts.Credentials, profile string, credentials
 	if err != nil {
 		log.WithError(err).Panicf("Could not save credentials file!")
 	}
-
-	log.WithField("Profile", profile).Info("Temprory credentials are exported!")
 }
 
 func mustLoadFile(path string) *ini.File {
@@ -78,9 +76,14 @@ func mustCreateTempCredentials(sourceProfile string, mfaArn string) *sts.Credent
 func main() {
 	//ctx := context.TODO()
 
-	profile := flag.String("profile", "default", "aws profile")
+	var profile string
+
+	flag.StringVar(&profile, "profile", "default", "aws profile")
+	flag.StringVar(&profile, "p", "default", "aws profile")
+
 	flag.Parse()
 
+	fmt.Printf("Exporting credentials for '%s'", profile)
 	usr, err := user.Current()
 	if err != nil {
 		log.WithError(err).Panicf("Could not get current User!")
@@ -91,11 +94,12 @@ func main() {
 	configPath := usr.HomeDir + "/.aws/config"
 	configFile := mustLoadFile(configPath)
 
-	sourceProfile := configFile.Section("profile " + *profile).Key("source_profile").Value()
+	sourceProfile := configFile.Section("profile " + profile).Key("source_profile").Value()
 	mfaArn := configFile.Section(sourceProfile).Key("mfa_serial").Value()
 
 	tempCredentials := mustCreateTempCredentials(sourceProfile, mfaArn)
 
-	exportCredentials(tempCredentials, *profile, credentialsFile, credentialsPath)
+	exportCredentials(tempCredentials, profile, credentialsFile, credentialsPath)
 
+	fmt.Printf("Temporary credentials are exported to '%s'!", credentialsPath)
 }
